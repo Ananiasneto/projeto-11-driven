@@ -2,9 +2,71 @@
 import styled from "styled-components"
 import TopBar from "../components/TopBar"
 import BottomBar from "../components/BottomBar"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
-function Habitos() {
+function Habitos({ token }) {
+  const[name , setName]=useState('');
+  const[habitosExistentes,setHabitosExistentes]=useState(null);
+  const [diasSelecionados, setDiasSelecionados] = useState([]);
+  const [mostrar,setMostrar]=useState('');
 
+  function adicionaHabito(){
+    if(!mostrar){
+      setMostrar('sim')
+    }else{
+    setMostrar('');
+  }}
+  function selecionado(id) {
+    if (diasSelecionados.includes(id)) {
+      setDiasSelecionados(diasSelecionados.filter(dia => dia !== id));
+    } else {
+      setDiasSelecionados([...diasSelecionados, id]);
+    }
+  }
+  function fechaAba() {
+    setMostrar('');
+  }
+  function criarHabito(e) {
+    e.preventDefault()
+    const config={
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+     
+    }
+     const Url="https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
+     const body={ name: name,
+      days: diasSelecionados}
+      axios.post(Url, body, config)
+      .then(res => {
+        alert("Hábito adicionado com sucesso!", res.data);
+        setName('');
+        setDiasSelecionados([]);
+        setMostrar(''); 
+      })
+      .catch(err => {
+        alert(err.response.data.message);
+      });
+  }
+  useEffect (()=>{
+    const Url="https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
+
+    const config={
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+
+    axios.get(Url,config)
+    .then(res=>setHabitosExistentes(res.data))
+    .catch(err=>alert(err.response.data.message))
+
+  },[habitosExistentes])
+  if (habitosExistentes===null){
+      return <div>carregando ... </div>
+  }
 
   return (
     <>
@@ -12,26 +74,34 @@ function Habitos() {
     <Container>
     <Habito>
         <TextHabito>Meus habitos</TextHabito>
-        <Botao>+</Botao>
+        <Botao onClick={adicionaHabito}>+</Botao>
     </Habito>
-    <AdcHabito> {/* isso eh mostrado ao clicar no botao de + tarefas*/} 
-        <Input type="text" placeholder="Nome do habito "/>
+    <AdcHabito mostrar={mostrar} onSubmit={criarHabito}> 
+        <Input type="text" placeholder="Nome do habito " value={name} required onChange={(e)=>setName(e.target.value)}/>
         <Dias>
-          <DiaSemana dia="D">D</DiaSemana>
-          <DiaSemana dia="S">S</DiaSemana>
-          <DiaSemana dia="T">T</DiaSemana>
-          <DiaSemana dia="Q">Q</DiaSemana>
-          <DiaSemana dia="Q">Q</DiaSemana>
-          <DiaSemana dia="S">S</DiaSemana>
-          <DiaSemana dia="S">S</DiaSemana>
-        </Dias>
+  <DiaSemana selected={diasSelecionados.includes("1")} id="1" onClick={() => selecionado("1")}>D</DiaSemana>
+  <DiaSemana selected={diasSelecionados.includes("2")} id="2" onClick={() => selecionado("2")}>S</DiaSemana>
+  <DiaSemana selected={diasSelecionados.includes("3")} id="3" onClick={() => selecionado("3")}>T</DiaSemana>
+  <DiaSemana selected={diasSelecionados.includes("4")} id="4" onClick={() => selecionado("4")}>Q</DiaSemana>
+  <DiaSemana selected={diasSelecionados.includes("5")} id="5" onClick={() => selecionado("5")}>Q</DiaSemana>
+  <DiaSemana selected={diasSelecionados.includes("6")} id="6" onClick={() => selecionado("6")}>S</DiaSemana>
+  <DiaSemana selected={diasSelecionados.includes("7")} id="7" onClick={() => selecionado("7")}>S</DiaSemana>
+</Dias>
+
         <Botoes>
-          <BotaoCancelar>Cancelar</BotaoCancelar>
-          <BotaoSalvar>Salvar</BotaoSalvar>
+          <BotaoCancelar onClick={fechaAba}>Cancelar</BotaoCancelar>
+          <BotaoSalvar type="submit"> Salvar</BotaoSalvar>
         </Botoes>
     </AdcHabito>
-
-    {/*<Text>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</Text> isso aparece se n tiver habito pra mostrar na aba Hoje*/}
+    <div>
+    {(habitosExistentes.length > 0) ? (
+          habitosExistentes.map((habito, index) => (
+            <div key={index}>{habito.name}</div>
+          ))
+        ) : (
+          <Text>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</Text>
+        )}
+    </div>
     </Container>
     <BottomBar/>
     </>
@@ -64,14 +134,14 @@ const Input=styled.input`
   color: #DBDBDB;
 } `
 
-const AdcHabito=styled.div`
-display: none;
+const AdcHabito=styled.form`
+display:${(props) => (props.mostrar==='sim' ? "flex" : "none")};
 flex-direction: column;
   margin-left: 5%;
    
 `
 const Dias=styled.div`
-  
+  display: flex;
    
 `
 
@@ -102,15 +172,21 @@ border-radius:5px;
   
    
 `
-const DiaSemana=styled.button`
-margin-top: 10px;
+const DiaSemana = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
   margin-right: 4px;
   width: 30px;
   height: 30px;
   font-size: 20px;
   border: 1px #d4d4d4 solid;
-  color:#d4d4d4;
-`
+  color: ${(props) => (props.selected ? "#FFFFFF" : "#DBDBDB")};
+  background-color:${(props) => (props.selected ? "#CFCFCF" : "#FFFFFF")};
+  cursor: pointer;
+`;
+
 const Container=styled.div`
   margin-top:90px ;
 

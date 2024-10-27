@@ -1,30 +1,37 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 function Bottombar() {
-  const [selected, setSelected] = useState("habitos");
+  const navigate = useNavigate();
+  const location = useLocation(); 
+  const [selected, setSelected] = useState(location.pathname === "/Habitos" ? "habitos" : "calendario");
+
+  useEffect(() => {
+    if (selected === "habitos") {
+      navigate("/Habitos");
+    } else if (selected === "calendario") {
+      navigate("/Hoje");
+    }
+  }, [selected, navigate]);
 
   return (
-    <>
-      <Barra>
-        <HabitoSelecao to="/Habitos"
-          selected={selected === "habitos"}
-          onClick={() => setSelected("habitos")}
-        >
-          <CalendarMonthIcon/> Hábitos
-        </HabitoSelecao>
-        <Calendario to="/Hoje"
-          selected={selected === "calendario"}
-          onClick={() => setSelected("calendario")}
-        >
-          <EventAvailableIcon/> Hoje
-        </Calendario>
-      </Barra>
-    </>
+    <Barra>
+      <HabitoSelecao
+        selected={selected}
+        onClick={() => setSelected("habitos")}
+      >
+        <CalendarMonthIcon /> Hábitos
+      </HabitoSelecao>
+      <Calendario
+        selected={selected}
+        onClick={() => setSelected("calendario")}
+      >
+        <EventAvailableIcon /> Hoje
+      </Calendario>
+    </Barra>
   );
 }
 
@@ -34,7 +41,6 @@ const Barra = styled.div`
   background-color: #126ba5;
   color: white;
   display: flex;
-
   position: fixed;
   bottom: 0;
   left: 0;
@@ -43,32 +49,26 @@ const Barra = styled.div`
   z-index: 1;
 `;
 
-const HabitoSelecao = styled(Link)`
-display: flex;
-align-items: center;
-justify-content: center;
+const HabitoSelecao = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 50%;
   height: 100%;
-  background-color: ${(props) => (props.selected ? "#126ba5" : "white")};
-  color: ${(props) => (props.selected ? "white" : "#888")};
-  border: none;
+  background-color: ${(props) => (props.selected === "habitos" ? "#126ba5" : "white")};
+  color: ${(props) => (props.selected === "habitos" ? "white" : "#888")};
   cursor: pointer;
   font-size: 18px;
-  text-decoration: none;
-
- 
 `;
 
-const Calendario = styled(Link)`
-display: flex;
-align-items: center;
-justify-content: center;
-    width: 50%;
+const Calendario = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
   height: 100%;
-  background-color: ${(props) => (props.selected ? "#126ba5" : "white")};
-  color: ${(props) => (props.selected ? "white" : "#888")};
-  border: none;
+  background-color: ${(props) => (props.selected === "calendario" ? "#126ba5" : "white")};
+  color: ${(props) => (props.selected === "calendario" ? "white" : "#888")};
   cursor: pointer;
   font-size: 18px;
-  text-decoration: none;
 `;

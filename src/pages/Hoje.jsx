@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import TopBar from "../components/TopBar"
 import BottomBar from "../components/BottomBar"
 import CheckIcon from '@mui/icons-material/Check';
-function Hoje() {
+function Hoje({token}) {
     const [selecionado, setSelecionado] = useState(false); 
 
     const botaoSelecionado = () => {

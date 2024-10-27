@@ -4,18 +4,21 @@ import { Link } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
-function Login() {
+
+function Login({setToken}) {
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
     const navigate = useNavigate();
 
-    function fazerLogin(e){
+    function fazerLogin(e){ 
       e.preventDefault()
       const url='https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login'
       const body={email,password}
 
       axios.post(url,body)
       .then(response => {
+        setToken(response.data.token)
+        localStorage.setItem("token",response.data.token)
         navigate('/hoje');
       })
       .catch(err=>alert(err.response.data.message))
