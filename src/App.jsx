@@ -11,8 +11,9 @@ function App() {
     <>
       <GlobalStyle />
       
-        {/*<Login/> <Cadastro/> */}
-        <Hoje/>
+        {/*<Login/>  <Cadastro/> <Hoje/>  <Hoje/>  */}
+        <Habitos/>
+        
     </>
   );
 }
