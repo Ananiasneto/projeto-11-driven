@@ -1,18 +1,36 @@
 import styled from "styled-components"
 import Logo from "../components/Logo"
+import { Link } from "react-router-dom"
+import { useState } from "react"
+import axios from "axios"
+import { useNavigate } from "react-router-dom";
 function Login() {
+    const [email,setEmail]=useState('')
+    const [password,setPassword]=useState('')
+    const navigate = useNavigate();
 
+    function fazerLogin(e){
+      e.preventDefault()
+      const url='https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login'
+      const body={email,password}
+
+      axios.post(url,body)
+      .then(response => {
+        navigate('/hoje');
+      })
+      .catch(err=>alert(err.response.data.message))
+    }
 
     return (
       <>
       <Container>
         <Logo/>
-        <Form action="/">
-        <Input type="email" placeholder="Email" name="" id="" />
-        <Input type="password" placeholder="Senha"/>
+        <Form onSubmit={fazerLogin}>
+        <Input type="email" placeholder="Email" name="email"  value={email} onChange={e=>setEmail(e.target.value)}/>
+        <Input type="password" name='password' placeholder="Senha" value={password} onChange={e=>setPassword(e.target.value)}/>
         <InputSubmit type="submit" />
         </Form>
-        <Enviar href="">Não tem uma conta? Cadastre-se!</Enviar>
+        <Enviar to='/cadastro' >Não tem uma conta? Cadastre-se!</Enviar>
         </Container>
       </>
     )
@@ -59,7 +77,7 @@ border-radius: 5px;
 margin-right: 10%;
 margin-left: 10%;
 `
-const Enviar=styled.a`
+const Enviar=styled(Link)`
 margin-top: 10px;
 color:  #52B6FF;
 
