@@ -1,15 +1,19 @@
 
 import styled from "styled-components"
-import imagem from "../assets/bob.png"
+
+import { useContext } from "react"
+import UserContext from "../contexts/UserContext"
 
 function TopBar() {
+  const [user]=useContext(UserContext); 
+   
 
 
   return (
     <>
   <Barra>
     <Texto>TrackIt</Texto>
-    <Imagem src={imagem} alt="" />
+    <Imagem src={user.image} alt="" />
   </Barra>
     </>
   )

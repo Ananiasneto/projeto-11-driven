@@ -1,14 +1,24 @@
 import styled from "styled-components"
-import React, { useState } from "react"; 
+import React, { useContext, useEffect, useState } from "react"; 
 import TopBar from "../components/TopBar"
 import BottomBar from "../components/BottomBar"
 import CheckIcon from '@mui/icons-material/Check';
-function Hoje({token}) {
+import AuthContext from "../contexts/AuthContext";
+import { Navigate, useNavigate } from "react-router-dom";
+
+function Hoje() {
     const [selecionado, setSelecionado] = useState(false); 
+    const [token,setToken]=useContext(AuthContext)
+    const navigate=useNavigate()
 
     const botaoSelecionado = () => {
       setSelecionado(!selecionado);
     };
+    useEffect (()=>{
+      if(!token){
+        navigate("/")
+      }
+    },[])
 
     return (
       <>

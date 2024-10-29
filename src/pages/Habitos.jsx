@@ -2,14 +2,18 @@
 import styled from "styled-components"
 import TopBar from "../components/TopBar"
 import BottomBar from "../components/BottomBar"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "axios"
+import AuthContext from "../contexts/AuthContext"
+import { useNavigate } from "react-router-dom"
 
-function Habitos({ token }) {
+function Habitos() {
   const[name , setName]=useState('');
   const[habitosExistentes,setHabitosExistentes]=useState(null);
   const [diasSelecionados, setDiasSelecionados] = useState([]);
   const [mostrar,setMostrar]=useState('');
+  const [token,setToken]=useContext(AuthContext);
+  const navigate=useNavigate();
 
   function adicionaHabito(){
     if(!mostrar){
@@ -49,6 +53,11 @@ function Habitos({ token }) {
         alert(err.response.data.message);
       });
   }
+  useEffect (()=>{
+    if(!token){
+      navigate("/")
+    }
+  },[])
   useEffect (()=>{
     const Url="https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits"
 
@@ -208,3 +217,29 @@ margin-left: 5%;
 line-height: 23px;
  
   `
+  const Barra = styled.div`
+  background-color: #126BA5;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  z-index: 1;
+`;
+
+
+const Imagem = styled.img`
+ height: 51px;
+ width: 51px;
+ border-radius: 100%;
+ border: 2px;
+ margin-right: 20px;
+`;
+const Texto = styled.h1`
+  margin-left: 20px;
+ font-size: 40px;
+`;

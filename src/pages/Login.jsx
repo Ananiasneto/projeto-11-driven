@@ -1,14 +1,17 @@
 import styled from "styled-components"
 import Logo from "../components/Logo"
 import { Link } from "react-router-dom"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
+import UserContext from "../contexts/UserContext"
+import AuthContext from "../contexts/AuthContext"
 
-function Login({setToken}) {
+function Login({token}) {
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
     const navigate = useNavigate();
+    
 
     function fazerLogin(e){ 
       e.preventDefault()
@@ -17,6 +20,7 @@ function Login({setToken}) {
 
       axios.post(url,body)
       .then(response => {
+        setUser(response.data)
         setToken(response.data.token)
         localStorage.setItem("token",response.data.token)
         navigate('/hoje');
