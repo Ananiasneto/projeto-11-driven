@@ -62,21 +62,24 @@ const Container=styled.div`
  
   `
   const Textos=styled.div`
-   margin-top:25px ;
+   padding-top:25px ;
   `
   const Tarefa=styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-left: 5%;
     margin-right: 5%;
  
   `
 const Principal=styled.h1`
+color: #666666;
  font-size: 20px;
 
 `
 const SubTitulo=styled.h2`
 font-size: 13px;
+color: #666666;
 `
 const Botao=styled.button`
  height: 70px;
@@ -87,6 +90,7 @@ const Botao=styled.button`
  background-color: ${(props) => (props.selecionado ? "green" : "#E7E7E7")};
  cursor: pointer;
  border-radius: 5px ;
+ margin-top:20px;
  
 `
 

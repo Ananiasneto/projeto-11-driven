@@ -105,7 +105,18 @@ function Habitos() {
     <div>
     {(habitosExistentes.length > 0) ? (
           habitosExistentes.map((habito, index) => (
-            <div key={index}>{habito.name}</div>
+            <Adicionado key={index}>
+              <TexthabitoAdc>{habito.name}</TexthabitoAdc>
+              <Dias>
+              <DiaSemana selected={habito.days.includes(1)} id="1" >D</DiaSemana>
+              <DiaSemana selected={habito.days.includes(2)} id="2" >S</DiaSemana>
+              <DiaSemana selected={habito.days.includes(3)} id="3">T</DiaSemana>
+              <DiaSemana selected={habito.days.includes(4)} id="4" >Q</DiaSemana>
+              <DiaSemana selected={habito.days.includes(5)} id="5" >Q</DiaSemana>
+              <DiaSemana selected={habito.days.includes(6)} id="6" >S</DiaSemana>
+              <DiaSemana selected={habito.days.includes(7)} id="7" >S</DiaSemana>
+            </Dias> 
+            </Adicionado>
           ))
         ) : (
           <Text>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</Text>
@@ -125,7 +136,7 @@ align-items: center;
 justify-content: space-between;
 margin-right:5%;
 margin-left: 5%;
- margin-bottom: 10%;
+ margin-bottom: 5%;
   `
 
 const TextHabito=styled.div`
@@ -153,6 +164,14 @@ const Dias=styled.div`
   display: flex;
    
 `
+const TexthabitoAdc=styled.h1`
+font-size: 23px;
+color:#666666;
+ 
+  `
+ const Adicionado=styled.div`
+   margin-left: 5%;
+ `
 
 const Botoes=styled.div`
 display: flex;
@@ -194,6 +213,7 @@ const DiaSemana = styled.div`
   color: ${(props) => (props.selected ? "#FFFFFF" : "#DBDBDB")};
   background-color:${(props) => (props.selected ? "#CFCFCF" : "#FFFFFF")};
   cursor: pointer;
+  border-radius: 5px;
 `;
 
 const Container=styled.div`
@@ -217,29 +237,3 @@ margin-left: 5%;
 line-height: 23px;
  
   `
-  const Barra = styled.div`
-  background-color: #126BA5;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 70px;
-  z-index: 1;
-`;
-
-
-const Imagem = styled.img`
- height: 51px;
- width: 51px;
- border-radius: 100%;
- border: 2px;
- margin-right: 20px;
-`;
-const Texto = styled.h1`
-  margin-left: 20px;
- font-size: 40px;
-`;

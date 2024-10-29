@@ -7,11 +7,12 @@ import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext"
 import AuthContext from "../contexts/AuthContext"
 
-function Login({token}) {
+function Login() {
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
     const navigate = useNavigate();
-    
+    const [user,setUser]=useContext(UserContext);
+    const [token,setToken]=useContext(AuthContext)
 
     function fazerLogin(e){ 
       e.preventDefault()
@@ -19,8 +20,10 @@ function Login({token}) {
       const body={email,password}
 
       axios.post(url,body)
+      
       .then(response => {
         setUser(response.data)
+        console.log(response.data)
         setToken(response.data.token)
         localStorage.setItem("token",response.data.token)
         navigate('/hoje');

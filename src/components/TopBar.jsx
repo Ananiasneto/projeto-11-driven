@@ -33,7 +33,9 @@ const Barra = styled.div`
   right: 0;
   height: 70px;
   z-index: 1;
-`;
+box-shadow: 0px 4px 4px 0px #00000026;
+
+  `;
 
 
 const Imagem = styled.img`
