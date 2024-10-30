@@ -266,6 +266,7 @@ const DiaSemana = styled.div`
 
 const Container=styled.div`
   margin-top:90px ;
+   margin-bottom: 90px;
 
 `
 const Botao=styled.button`
