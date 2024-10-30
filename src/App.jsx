@@ -10,7 +10,7 @@ import AuthContext from "./contexts/AuthContext";
 
 function App() {
   const[token,setToken]=useState(localStorage.getItem("token"))
-  const [user,setUser]=useState(null)
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   return (
     <AuthContext.Provider value={[token,setToken]}>
     <UserContext.Provider value={[user,setUser]}>

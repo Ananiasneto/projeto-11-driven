@@ -46,6 +46,8 @@ const Imagem = styled.img`
  margin-right: 20px;
 `;
 const Texto = styled.h1`
+font-family: "Playball", cursive;
+font-weight: 400;
   margin-left: 20px;
  font-size: 40px;
 `;

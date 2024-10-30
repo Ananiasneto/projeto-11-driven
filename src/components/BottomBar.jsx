@@ -59,6 +59,7 @@ const HabitoSelecao = styled.div`
   color: ${(props) => (props.selected === "habitos" ? "white" : "#888")};
   cursor: pointer;
   font-size: 18px;
+  font-family: "Lexend Deca", sans-serif;
 `;
 
 const Calendario = styled.div`
@@ -71,4 +72,5 @@ const Calendario = styled.div`
   color: ${(props) => (props.selected === "calendario" ? "white" : "#888")};
   cursor: pointer;
   font-size: 18px;
+  font-family: "Lexend Deca", sans-serif;
 `;

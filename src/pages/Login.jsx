@@ -6,16 +6,19 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext"
 import AuthContext from "../contexts/AuthContext"
+import { ThreeDots } from 'react-loader-spinner';
 
 function Login() {
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
     const navigate = useNavigate();
     const [user,setUser]=useContext(UserContext);
-    const [token,setToken]=useContext(AuthContext)
+    const [token,setToken]=useContext(AuthContext);
+    const [enviando,setEnviando]=useState(false)
 
     function fazerLogin(e){ 
       e.preventDefault()
+      setEnviando(true); 
       const url='https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login'
       const body={email,password}
 
@@ -23,12 +26,16 @@ function Login() {
       
       .then(response => {
         setUser(response.data)
-        console.log(response.data)
+        localStorage.setItem('user', JSON.stringify(response.data));
         setToken(response.data.token)
         localStorage.setItem("token",response.data.token)
         navigate('/hoje');
       })
-      .catch(err=>alert(err.response.data.message))
+      .catch(err=>{
+        alert(err.response.data.message)
+        setEnviando(false);
+         }
+    )
     }
 
     return (
@@ -36,9 +43,22 @@ function Login() {
       <Container>
         <Logo/>
         <Form onSubmit={fazerLogin}>
-        <Input type="email" placeholder="Email" name="email"  value={email} onChange={e=>setEmail(e.target.value)}/>
-        <Input type="password" name='password' placeholder="Senha" value={password} onChange={e=>setPassword(e.target.value)}/>
-        <InputSubmit type="submit" />
+        <Input type="email" placeholder="Email" name="email"  value={email} disabled={enviando} onChange={e=>setEmail(e.target.value)}/>
+        <Input type="password" name='password' placeholder="Senha" value={password} disabled={enviando} onChange={e=>setPassword(e.target.value)}/>
+        <Button type="submit" disabled={enviando}>
+          {enviando ? (
+            <ThreeDots
+              visible={true}
+              height="30"
+              width="30" 
+              color="#FFFFFF"
+              radius="9"
+              ariaLabel="three-dots-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+          ) : 'Enviar'}
+        </Button>
         </Form>
         <Enviar to='/cadastro' >Não tem uma conta? Cadastre-se!</Enviar>
         </Container>
@@ -72,12 +92,16 @@ margin-left: 10%;
 border-radius: 5px;
 
 &::placeholder {
+  font-family: "Lexend Deca", sans-serif;
 color: #DBDBDB;
 }
 
 `
 
-const InputSubmit=styled.input`
+const Button=styled.button`
+display: flex;
+align-items: center;
+justify-content: center;
  height: 40px;
 border: 1px; 
 margin-top: 10px;
@@ -86,9 +110,11 @@ color: #ffffff;
 border-radius: 5px; 
 margin-right: 10%;
 margin-left: 10%;
+font-family: "Lexend Deca", sans-serif;
 `
 const Enviar=styled(Link)`
 margin-top: 10px;
 color:  #52B6FF;
+font-family: "Lexend Deca", sans-serif;
 
 `
